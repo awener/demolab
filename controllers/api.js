@@ -50,13 +50,13 @@ exports.findLocation = function(req, res) {
 
 exports.addLocation = function(req, res) {
 
-	
+	console.log("problem??");
 	var country = req.body.country;
 	var city = req.body.city;
 	var distance = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=Vancouver+BC&destinations=San+Francisco&mode=car&language=en&key=AIzaSyAByx66VVeWYSrp_n5ULUw9QQI57pQMqKI";
 
 		getCoords(country, city, function(coords) {
-
+			console.log("coordinates??");
 			req.body.coordinates =  coords;
 		
 	
