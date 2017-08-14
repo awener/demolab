@@ -258,27 +258,14 @@ angular.module("demoLab", ["ngFileUpload", "ngResource", "ngTable"]).controller(
 	$scope.save = function() {
 
 
-		/*
-		
-      $http.post("/api/places/"+$scope.form.name, $scope.form, function(resp) {
-			console.log(resp);
-		}, function(err) {
-			console.log(err);
-		})
-    
-	*/
-	console.log($scope.file);
 
 	$scope.form.photo = $scope.file;
-	console.log($scope.form)
         Upload.upload({
             url: '/api/places/' + $scope.form.name,
             data: {file: $scope.file, country: $scope.form.country.text, name: $scope.form.name, address: $scope.form.address, city: $scope.form.city, description: $scope.form.description, province: $scope.form.province, zipCode: $scope.form.zipCode }
         }).then(function (resp) {
-            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
         }, function (resp) {
-        	console.log(resp)
-            console.log('Error status: ' + resp.status);
+        	;
         });
     
 

@@ -8,7 +8,6 @@ exports.index = function(req, res) {
 }
 
 exports.list = function(req, res) {
-	console.log(req.query);
 	var count = parseInt(req.query.count);
 	var page = parseInt(req.query.page);
 	if (typeof req.query.page === 'undefined'){
@@ -20,7 +19,6 @@ exports.list = function(req, res) {
 	Location.find({}).sort(req.query.sorting)
         .skip(count * (page - 1))
         .limit(count).exec(function(err, data) {
-        	console.log(data);
 		return res.status(200).jsonp({list: data});
 	});
 
@@ -61,7 +59,6 @@ exports.addLocation = function(req, res) {
 
 			req.body.coordinates =  coords;
 		
-		console.log(req.body);
 	
 	if(req.files) {
 		req.body.photos = {
@@ -82,11 +79,9 @@ exports.addLocation = function(req, res) {
 
 exports.updateLocation = function(req, res) {
 
-	console.log("LOCATION CALLED!");
-	console.log(req.body);
+
 	Location.findOne({_id: req.body._id}, function(err, data) {
 		if(req.body.country != data.country || req.body.city != data.city) {
-			console.log("UPDATING COORDS")
 			getCoords(req.body.country, req.body.city, function(coords) {
 				req.body.coordinates = coords;
 				Location.update({_id: req.body._id}, { $set: req.body }, function() {
@@ -95,7 +90,6 @@ exports.updateLocation = function(req, res) {
 			});
 
 		} else {
-			console.log("cords are the same")
 			Location.update({_id: req.body._id}, { $set: req.body }, function() {
 				return res.status(200).end("");
 			});
