@@ -1,0 +1,138 @@
+<html ng-app="demoLab">
+
+<head>
+<style>
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+.tops {
+	margin: 50px;
+}
+</style>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/angular.ngtable/1.0.0/ng-table.css">
+</head>
+
+<body ng-controller="demoController" ng-cloak>
+<div class="container">
+<div class="col-xs-12 tops">
+<div class="col-xs-3"><button class="btn btn-primary" ng-click="newEntry=true;">Add new entry</button></div>
+
+<div class="col-xs-6"><input type="text" class="form-control" placeholder="Search by city name or coordinates" ng-model="formSearch"/></div>
+<div class="col-xs-3"><button class="btn btn-primary" ng-click="search(formSearch)">Search</button></div>
+
+</div>
+
+<div ng-show="search">
+
+{{searchResult}}
+
+</div>
+
+<div ng-show="newEntry" class="col-xs-offset-2 col-xs-8">
+<form name="form" role="form">
+	<div class="form-group row">
+		<input type="text" class="form-control" placeholder="Location name" ng-model="form.name" required/>
+	</div>
+	<div class="form-group row">
+		<input type="text" class="form-control" placeholder="Description" ng-model="form.description" required/>
+	</div>
+	<div class="form-group row">
+		<select class="form-control" ng-model="form.country" ng-options="operator.text for operator in countries" required></select>
+	</div>
+	<div class="form-group row">
+		<input type="text" class="form-control" placeholder="Zip code" ng-model="form.zipCode" required/>
+	</div>
+	<div class="form-group row">
+	<input type="text" class="form-control" placeholder="Province" ng-model="form.province" required/>
+	</div>
+	<div class="form-group row">
+	<input type="text" class="form-control" placeholder="City" ng-model="form.city" required/>
+	</div>
+	<div class="form-group row">
+	<input type="text" class="form-control" placeholder="Address" ng-model="form.address" required/>
+	</div>
+	<div class="form-group row">
+	<div class="btn btn-danger" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+    ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100"
+    ngf-resize="{width: 100, height: 100}">Select</div>
+	</div>
+	<div class="form-group row">
+		<button class="btn btn-primary" ng-click="save();" ng-disabled="form.$invalid;">Save</button>
+
+
+
+</div>
+</form>
+</div>
+<table ng-table="tableParams" class="table table-bordered table-striped table-condensed">
+      <tr ng-repeat="row in $data track by row._id">
+        <td data-title="'Name'" " sortable="'name'">
+        	<span ng-show="!row.isEditable"> {{row.name}} </span>
+        	<span ng-show="row.isEditable"> <input class="form-control" type="text" ng-model="row.name" /> </span>
+        	
+
+        </td>
+        <td data-title="'Description'" " sortable="'description'">
+       	 	<span ng-show="!row.isEditable">	{{row.description}} </span>
+       	 	<span ng-show="row.isEditable"> <input type="text" class="form-control" ng-model="row.description"/> </span>
+        </td>
+        <td data-title="'Country'" sortable="'country'">
+        <span ng-show="!row.isEditable"> {{row.country}} </span>
+        <span ng-show="row.isEditable"> <select class="form-control" ng-model="row.country" ng-options="operator.text for operator in countries" required></select> </span>
+        </td>
+
+        <td data-title="'City'" sortable="'city'"> 
+       		<span ng-show="!row.isEditable"> {{row.city}} </span>
+       		<span ng-show="row.isEditable"> <input type="text" class="form-control" ng-model="row.city"/> </span>
+        </td>
+        <td data-title="'Province'" sortable="'province'">
+        <span ng-show="!row.isEditable"> {{row.province}} </span>
+        <span ng-show="row.isEditable"> <input type="text" class="form-control" ng-model="row.province"/> </span>
+        </td>
+        <td data-title="'Address'" sortable="'address'"> 
+        	<span ng-show="!row.isEditable"> {{row.address}} </span>
+        	<span ng-show="row.isEditable"> <input type="text" class="form-control" ng-model="row.address"/> </span>
+        </td>
+        <td data-title="'Zip'" sortable="'zipCode'"> 
+        	<span ng-show="!row.isEditable"> {{row.zipCode}} </span> 
+        	<span ng-show="row.isEditable"> <input type="text" class="form-control" ng-model="row.zipCode"/> </span>
+        </td>
+       
+        <td data-title="'Photo'"> 
+        	<span ng-show="!row.isEditable"> <img id="photo{{row._id}}" /> </span>
+        </td>
+        <td data-title="'Edit'">
+         <button class="btn btn-warning" ng-click="row.isEditable=true" ng-show="!row.isEditable">Edit </button>
+         <button class="btn btn-warning" ng-click="row.isEditable=false" ng-show="row.isEditable">Cancel </button> 
+         <button class="btn btn-warning"  ng-show="row.isEditable" ng-click="update(row);">Save </button>  
+
+         </td>
+        <td data-title="'Favorite'"> 
+        	<button ng-show="!row.favorite" class="btn btn-danger" ng-click="favorite(row._id, true)">Favorite</button>
+        	<button ng-show="row.favorite" class="btn btn-danger" ng-click="favorite(row._id, false)">Unfavorite</button>
+         </td>
+
+
+        
+        
+      </tr>
+    </table>
+
+</div>
+
+
+<script type="text/javascript" src="https://opensource.keycdn.com/angularjs/1.6.5/angular.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/angular.file-upload/12.2.13/ng-file-upload.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular-resource.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/angular.ngtable/1.0.0/ng-table.js"></script>
+<script type="text/javascript" src="/public/js/app.js"></script>
+</body>
+
+
+</html>
