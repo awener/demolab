@@ -68,6 +68,8 @@ exports.addLocation = function(req, res) {
 	}
 	
 	var addNew = new Location(req.body).save(function(err) {
+		console.log(err);
+		console.log("MEH??")
 		if(err && err.errors) return errors(err.errors, res);
 		return res.status(200).end("");
 	})
