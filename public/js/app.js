@@ -254,6 +254,7 @@ angular.module("demoLab", ["ngFileUpload", "ngResource", "ngTable"]).controller(
 	];
 
 	$scope.form = {};
+	$scope.newEntry = false;
 
 	$scope.save = function() {
 
@@ -265,7 +266,11 @@ angular.module("demoLab", ["ngFileUpload", "ngResource", "ngTable"]).controller(
             data: {file: $scope.file, country: $scope.form.country.text, name: $scope.form.name, address: $scope.form.address, city: $scope.form.city, description: $scope.form.description, province: $scope.form.province, zipCode: $scope.form.zipCode }
         }).then(function (resp) {
         }, function (resp) {
-        	;
+
+        	 $scope.tableParams.reload();
+        	 $scope.form = {};
+        	 $scope.newEntry = false;
+        	
         });
     
 
